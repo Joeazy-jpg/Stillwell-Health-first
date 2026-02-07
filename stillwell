@@ -1,0 +1,150 @@
+// STILLWELL – FULL PRODUCT FOUNDATION (FRONTEND MVP+)
+// Vision: Calm, accessible, science-informed wellness companion
+
+import React, { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Progress } from "@/components/ui/progress";
+
+export default function Stillwell() {
+  const [page, setPage] = useState("onboarding");
+  const [assistantName, setAssistantName] = useState("Willow");
+  const [profile, setProfile] = useState({
+    age: "",
+    weight: "",
+    lifestyle: "",
+    diet: "",
+    struggles: "",
+    goal: "",
+  });
+
+  const [dailyLog, setDailyLog] = useState({
+    mood: 50,
+    energy: 50,
+    stress: 50,
+    sleep: "",
+    notes: "",
+  });
+
+  const recommendations = {
+    movement: "20–30 minutes of low-impact movement (walking, stretching, light strength).",
+    nutrition: "Whole foods focus: vegetables, protein, fiber, water. Reduce ultra-processed foods.",
+    stress: "Calm the nervous system: breathing, sunlight, regular sleep and breaks.",
+    habits: "Replace harmful habits with gentler alternatives tied to the same cue.",
+  };
+
+  return (
+    <div className="min-h-screen bg-[#F5F7F4] text-[#2F3E34] p-6 md:p-10 font-sans">
+      <div className="max-w-5xl mx-auto space-y-8">
+        <header className="flex justify-between items-center">
+          <h1 className="text-4xl font-semibold">Stillwell</h1>
+          {page !== "onboarding" && (
+            <nav className="space-x-2">
+              <Button variant="ghost" onClick={() => setPage("dashboard")}>Dashboard</Button>
+              <Button variant="ghost" onClick={() => setPage("checkin")}>Daily Check-in</Button>
+              <Button variant="ghost" onClick={() => setPage("assistant")}>{assistantName}</Button>
+            </nav>
+          )}
+        </header>
+
+        {page === "onboarding" && (
+          <Card className="rounded-2xl">
+            <CardContent className="p-6 space-y-4">
+              <h2 className="text-2xl">Welcome to Stillwell</h2>
+              <p>Gentle, science-informed support for balance and health.</p>
+              <Input value={assistantName} onChange={(e) => setAssistantName(e.target.value)} placeholder="Name your guide" />
+              <Input placeholder="Age" onChange={(e) => setProfile({ ...profile, age: e.target.value })} />
+              <Input placeholder="Weight" onChange={(e) => setProfile({ ...profile, weight: e.target.value })} />
+              <Input placeholder="Work or School Life" onChange={(e) => setProfile({ ...profile, lifestyle: e.target.value })} />
+              <Textarea placeholder="Typical diet" onChange={(e) => setProfile({ ...profile, diet: e.target.value })} />
+              <Textarea placeholder="Health challenges" onChange={(e) => setProfile({ ...profile, struggles: e.target.value })} />
+              <Textarea placeholder="Main goal" onChange={(e) => setProfile({ ...profile, goal: e.target.value })} />
+              <Button onClick={() => setPage("dashboard")}>Begin</Button>
+            </CardContent>
+          </Card>
+        )}
+
+        {page === "dashboard" && (
+          <div className="grid md:grid-cols-3 gap-6">
+            <Card className="rounded-2xl md:col-span-2">
+              <CardContent className="p-6 space-y-3">
+                <h2 className="text-2xl">Your Daily Guidance</h2>
+                <p><strong>Movement:</strong> {recommendations.movement}</p>
+                <p><strong>Nutrition:</strong> {recommendations.nutrition}</p>
+                <p><strong>Stress:</strong> {recommendations.stress}</p>
+                <p><strong>Habits:</strong> {recommendations.habits}</p>
+              </CardContent>
+            </Card>
+
+            <Card className="rounded-2xl">
+              <CardContent className="p-6 space-y-3">
+                <h2 className="text-xl">Today’s Balance</h2>
+                <p>Mood</p>
+                <Progress value={dailyLog.mood} />
+                <p>Energy</p>
+                <Progress value={dailyLog.energy} />
+                <p>Stress</p>
+                <Progress value={100 - dailyLog.stress} />
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
+        {page === "checkin" && (
+          <Card className="rounded-2xl">
+            <CardContent className="p-6 space-y-4">
+              <h2 className="text-2xl">Daily Check-in</h2>
+              <Input placeholder="Hours of sleep" onChange={(e) => setDailyLog({ ...dailyLog, sleep: e.target.value })} />
+              <Textarea placeholder="How did today feel?" onChange={(e) => setDailyLog({ ...dailyLog, notes: e.target.value })} />
+              <Button onClick={() => setPage("dashboard")}>Save</Button>
+            </CardContent>
+          </Card>
+        )}
+
+        {page === "assistant" && (
+          <Card className="rounded-2xl">
+            <CardContent className="p-6 space-y-4">
+              <h2 className="text-2xl">{assistantName}</h2>
+              <div className="bg-white p-4 rounded-xl h-48 overflow-y-auto text-sm">
+                <p>{assistantName}: I’m here to guide you calmly and consistently.</p>
+                <p>{assistantName}: Small steps, done daily, create real change.</p>
+              </div>
+              <Input placeholder="Ask for guidance or support…" />
+              <Button>Send</Button>
+            </CardContent>
+          </Card>
+        )}
+
+        <footer className="text-xs text-gray-500">
+          Educational wellness support only. Not a substitute for professional care.
+        </footer>
+      </div>
+    </div>
+  );
+}
+
+/*
+BACKEND & AI (NEXT PHASE – DESIGN)
+--------------------------------
+- Auth: user accounts, encrypted health data
+- Database: daily logs, goals, habits
+- AI layer:
+  • Reads user profile + history
+  • Generates gentle, evidence-aligned suggestions
+  • Avoids diagnosis or medical claims
+- Science updates:
+  • Curated research summaries
+  • Filtered by age, goal, and struggles
+
+ACCESSIBILITY
+-------------
+- Large text mode
+- One-action-per-screen mode
+- Voice input/output
+
+STILLWELL PHILOSOPHY
+-------------------
+Calm > Consistency > Perfection
+*/
