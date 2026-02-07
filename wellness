@@ -1,0 +1,114 @@
+// App.js (or pages/index.js if using Next.js)
+import React, { useState } from "react";
+
+function Stillwell() {
+  const [page, setPage] = useState("onboarding");
+  const [assistantName, setAssistantName] = useState("Willow");
+  const [profile, setProfile] = useState({
+    age: "",
+    weight: "",
+    lifestyle: "",
+    diet: "",
+    struggles: "",
+    goal: "",
+  });
+  const [dailyLog, setDailyLog] = useState({
+    mood: 50,
+    energy: 50,
+    stress: 50,
+    sleep: "",
+    notes: "",
+  });
+
+  const recommendations = {
+    movement: "20–30 minutes of gentle movement (walk, stretch, light strength).",
+    nutrition: "Whole foods: vegetables, protein, fiber, water. Limit processed foods.",
+    stress: "Relaxation: breathing exercises, sunlight, consistent sleep.",
+    habits: "Replace unhealthy habits with gentle alternatives (e.g., tea instead of soda).",
+  };
+
+  return (
+    <div style={{ minHeight: "100vh", background: "#F5F7F4", color: "#2F3E34", padding: 20, fontFamily: "sans-serif" }}>
+      <div style={{ maxWidth: 800, margin: "0 auto" }}>
+        <header style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <h1 style={{ fontSize: 32, fontWeight: "600" }}>Stillwell</h1>
+          {page !== "onboarding" && (
+            <nav>
+              <button onClick={() => setPage("dashboard")} style={{ margin: 5 }}>Dashboard</button>
+              <button onClick={() => setPage("checkin")} style={{ margin: 5 }}>Daily Check-in</button>
+              <button onClick={() => setPage("assistant")} style={{ margin: 5 }}>{assistantName}</button>
+            </nav>
+          )}
+        </header>
+
+        {page === "onboarding" && (
+          <div style={{ background: "#fff", padding: 20, borderRadius: 16, marginTop: 20 }}>
+            <h2>Welcome to Stillwell</h2>
+            <p>Gentle, science-informed support for balance and health.</p>
+            <input
+              placeholder="Name your guide"
+              value={assistantName}
+              onChange={(e) => setAssistantName(e.target.value)}
+              style={{ width: "100%", padding: 8, marginBottom: 10 }}
+            />
+            <input placeholder="Age" onChange={(e) => setProfile({ ...profile, age: e.target.value })} style={{ width: "100%", padding: 8, marginBottom: 10 }} />
+            <input placeholder="Weight" onChange={(e) => setProfile({ ...profile, weight: e.target.value })} style={{ width: "100%", padding: 8, marginBottom: 10 }} />
+            <input placeholder="Work or School Life" onChange={(e) => setProfile({ ...profile, lifestyle: e.target.value })} style={{ width: "100%", padding: 8, marginBottom: 10 }} />
+            <textarea placeholder="Typical diet" onChange={(e) => setProfile({ ...profile, diet: e.target.value })} style={{ width: "100%", padding: 8, marginBottom: 10 }} />
+            <textarea placeholder="Health challenges" onChange={(e) => setProfile({ ...profile, struggles: e.target.value })} style={{ width: "100%", padding: 8, marginBottom: 10 }} />
+            <textarea placeholder="Main goal" onChange={(e) => setProfile({ ...profile, goal: e.target.value })} style={{ width: "100%", padding: 8, marginBottom: 10 }} />
+            <button onClick={() => setPage("dashboard")} style={{ padding: 10, width: "100%", marginTop: 10 }}>Begin</button>
+          </div>
+        )}
+
+        {page === "dashboard" && (
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 20, marginTop: 20 }}>
+            <div style={{ flex: 2, background: "#fff", padding: 20, borderRadius: 16 }}>
+              <h2>Your Daily Guidance</h2>
+              <p><strong>Movement:</strong> {recommendations.movement}</p>
+              <p><strong>Nutrition:</strong> {recommendations.nutrition}</p>
+              <p><strong>Stress:</strong> {recommendations.stress}</p>
+              <p><strong>Habits:</strong> {recommendations.habits}</p>
+            </div>
+            <div style={{ flex: 1, background: "#fff", padding: 20, borderRadius: 16 }}>
+              <h2>Today’s Balance</h2>
+              <p>Mood</p>
+              <progress value={dailyLog.mood} max="100" style={{ width: "100%" }}></progress>
+              <p>Energy</p>
+              <progress value={dailyLog.energy} max="100" style={{ width: "100%" }}></progress>
+              <p>Stress</p>
+              <progress value={100 - dailyLog.stress} max="100" style={{ width: "100%" }}></progress>
+            </div>
+          </div>
+        )}
+
+        {page === "checkin" && (
+          <div style={{ background: "#fff", padding: 20, borderRadius: 16, marginTop: 20 }}>
+            <h2>Daily Check-in</h2>
+            <input placeholder="Hours of sleep" onChange={(e) => setDailyLog({ ...dailyLog, sleep: e.target.value })} style={{ width: "100%", padding: 8, marginBottom: 10 }} />
+            <textarea placeholder="How did today feel?" onChange={(e) => setDailyLog({ ...dailyLog, notes: e.target.value })} style={{ width: "100%", padding: 8, marginBottom: 10 }} />
+            <button onClick={() => setPage("dashboard")} style={{ padding: 10, width: "100%", marginTop: 10 }}>Save</button>
+          </div>
+        )}
+
+        {page === "assistant" && (
+          <div style={{ background: "#fff", padding: 20, borderRadius: 16, marginTop: 20 }}>
+            <h2>{assistantName}</h2>
+            <div style={{ background: "#e8f0ea", padding: 10, borderRadius: 12, height: 150, overflowY: "auto", marginBottom: 10 }}>
+              <p>{assistantName}: I’m here to guide you calmly and consistently.</p>
+              <p>{assistantName}: Small steps, done daily, create real change.</p>
+            </div>
+            <input placeholder="Ask for guidance or support…" style={{ width: "100%", padding: 8, marginBottom: 10 }} />
+            <button style={{ padding: 10, width: "100%" }}>Send</button>
+          </div>
+        )}
+
+        <footer style={{ fontSize: 12, color: "#888", marginTop: 20 }}>
+          Educational wellness support only. Not a substitute for professional care.
+        </footer>
+      </div>
+    </div>
+  );
+}
+
+export default Stillwell;
